@@ -5,9 +5,9 @@ var transactions = [
   {id: 3, email:'e1', phone:'p3', card:'c3'},
   {id: 4, email:'e4', phone:'p4', card:'c4'},
 ]
-var customer = {
-  {customer:1, transactions:[], phones:[], emails:[], cards:[]}
-}
+// customer = {
+//   {customer:1, transactions:[], phones:[], emails:[], cards:[]}
+// }
 module.exports = {
   generateCustomerReport: function(transactions) {
     var uniqemail = [];
@@ -15,42 +15,46 @@ module.exports = {
     var uniqcard = [];
     var customers = [];
     transactions.forEach(function (t) {
-      var indexemail = uniqemail.findIndex(i => t.email === i);
+      var indexemail = uniqemail.findIndex(i => {t.email === i.email});
+      console.log(indexemail);
       if(indexemail === -1) {
         uniqemail.push({email: t.email, id: [t.id]});
       } else {
         uniqemail[indexemail].id.push(t.id);
       }
-      var indexphone = uniqephone.findIndex(i => t.phone === i);
+      var indexphone = uniqphone.findIndex(i => t.phone === i);
       if(indexphone === -1) {
-        uniqephone.push({phone: t.phone, id: [t.id]});
+        uniqphone.push({phone: t.phone, id: [t.id]});
       } else {
         uniqephone[indexephone].id.push(t.id);
       }
-      var indexcard = uniqecard.findIndex(i => t.card === i);
-      if(indexecard === -1) {
-        uniqecard.push({email: t.card, id: [t.id]});
+      var indexcard = uniqcard.findIndex(i => t.card === i);
+      if(indexcard === -1) {
+        uniqcard.push({email: t.card, id: [t.id]});
       } else {
         uniqecard[indexecard].id.push(t.id);
       }
     });
     var uniqcustomer = Math.min(uniqemail.length, uniqcard.length, uniqphone.length);
-    for(var i = 1; i <= uniqcustomer; i++) {
+    for(var i = 0; i <= uniqcustomer; i++) {
       var trans = new Set();
-      if(uniqemail[i].id.length > 1) {
-        uniqemail[i].id.forEach(i => trans.add(i))
-      }
-      if(uniqphone[i].id.length > 1) {
-        uniqphone[i].id.forEach(i => trans.add(i))
-      }
-      if(uniqcard[i].id.length > 1) {
-        uniqcard[i].id.forEach(i => trans.add(i))
-      }
-      tran.forEach()
-      customers.push({customer:i, transactions: trans, })
+      uniqemail[i].id.forEach(i => trans.add(i))
+      uniqphone[i].id.forEach(i => trans.add(i))
+      uniqcard[i].id.forEach(i => trans.add(i))
+      var emails = [];
+      var phones = [];
+      var cards = [];
+      trans.forEach(function(i) {
+        emails.push(transactions[i].email);
+        phones.push(transactions[i].phones);
+        cards.push(transactions[i].cards);
+      })
+      customers.push({customer:i+1, transactions: trans, emails: emails, phone: phones, cards: cards});
     }
+    return customers
   },
   addNewTransaction: function(transaction) {
 
   },
 }
+console.log(module.exports.generateCustomerReport(transactions));
